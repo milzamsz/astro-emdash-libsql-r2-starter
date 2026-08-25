@@ -1,0 +1,48 @@
+{
+  "name": "astro-emdash-libsql-r2-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": "10.34.5"
+  },
+  "scripts": {
+    "dev": "emdash dev",
+    "build": "astro build",
+    "start": "node ./dist/server/entry.mjs",
+    "type-check": "astro check",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify:template": "node scripts/verify-template-contract.mjs",
+    "test:docker": "node scripts/test-docker-runtime.mjs",
+    "audit:parity": "node scripts/audit-libsql-parity.mjs",
+    "test:libsql": "node scripts/test-libsql-runtime.mjs",
+    "test:parity": "node scripts/test-parity-audit.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.4",
+    "@astrojs/react": "^6.0.4",
+    "@aws-sdk/client-s3": "^3.1116.0",
+    "@aws-sdk/s3-request-presigner": "^3.1117.0",
+    "@libsql/client": "^0.15.15",
+    "@libsql/kysely-libsql": "^0.4.1",
+    "astro": "^7.2.4",
+    "better-sqlite3": "^12.11.1",
+    "emdash": "0.34.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

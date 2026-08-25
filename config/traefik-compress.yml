@@ -1,0 +1,8 @@
+http:
+  middlewares:
+    example-compress:
+      compress:
+        encodings:
+          - br
+          - gzip
+        minResponseBodyBytes: 1024
