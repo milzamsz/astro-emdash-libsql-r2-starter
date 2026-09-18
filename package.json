@@ -23,26 +23,26 @@
     "test:parity": "node scripts/test-parity-audit.mjs"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.4",
-    "@astrojs/react": "^6.0.4",
-    "@aws-sdk/client-s3": "^3.1116.0",
-    "@aws-sdk/s3-request-presigner": "^3.1117.0",
-    "@libsql/client": "^0.15.15",
+    "@astrojs/node": "^11.1.6",
+    "@astrojs/react": "^6.0.6",
+    "@aws-sdk/client-s3": "^3.1135.0",
+    "@aws-sdk/s3-request-presigner": "^3.1135.0",
+    "@libsql/client": "^0.18.0",
     "@libsql/kysely-libsql": "^0.4.1",
-    "astro": "^7.2.4",
+    "astro": "^7.3.3",
     "better-sqlite3": "^12.11.1",
     "emdash": "0.34.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/node": "^24.13.2",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
+    "@types/node": "^24.13.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "prettier": "^3.9.8",
+    "prettier-plugin-astro": "^1.0.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   }
 }
