@@ -27,7 +27,7 @@ try {
       "node",
       tag,
       "-e",
-      "const DB=require('better-sqlite3'); const db=new DB(':memory:'); if(db.prepare('SELECT 1 v').get().v!==1) process.exit(1); console.log('runtime sqlite compatibility ok')",
+      "const {DatabaseSync}=require('node:sqlite'); const db=new DatabaseSync(':memory:'); if(db.prepare('SELECT 1 v').get().v!==1) process.exit(1); console.log('runtime sqlite compatibility ok')",
     ],
     { encoding: "utf8" },
   );

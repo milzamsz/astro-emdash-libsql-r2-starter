@@ -19,8 +19,9 @@ This template captures lessons from a real production migration: build-time data
 ## Included
 
 - Astro 7 SSR with Node standalone adapter.
-- EmDash 0.34.0 and Live Content Collections.
-- SQLite for local development.
+- EmDash 0.38.0 and Live Content Collections.
+- SQLite for local development on Node's built-in `node:sqlite` (no native addon).
+- EmDash core migrations applied automatically at runtime (`migrations.runtime = "auto"`).
 - Runtime-resolved libSQL dialect for production; credentials never baked into `dist`.
 - R2/S3 descriptor selected during build, credentials resolved at runtime. Browser uploads use signed direct R2 PUTs, so bucket CORS is required.
 - Root-only runtime secret file mounted by Dokploy.

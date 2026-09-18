@@ -45,7 +45,7 @@ try {
       "SQLD_NODE=primary",
       "-e",
       `SQLD_HTTP_AUTH=basic:${token}`,
-      "ghcr.io/tursodatabase/libsql-server:v0.24.32",
+      "ghcr.io/tursodatabase/libsql-server:v0.24.33",
     ],
     { stdio: "ignore" },
   );

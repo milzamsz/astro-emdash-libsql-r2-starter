@@ -48,6 +48,8 @@ describe("stack version alignment", () => {
     expect(readFileSync("scripts/test-libsql-runtime.mjs", "utf8")).toContain(
       pin,
     );
-    expect(readFileSync("scripts/test-parity-audit.mjs", "utf8")).toContain(pin);
+    expect(readFileSync("scripts/test-parity-audit.mjs", "utf8")).toContain(
+      pin,
+    );
   });
 });

@@ -4,7 +4,7 @@ import { rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createClient } from "@libsql/client";
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
 const suffix = String(process.pid);
 const name = `starter-parity-${suffix}`;
@@ -26,7 +26,7 @@ try {
       "SQLD_NODE=primary",
       "-e",
       `SQLD_HTTP_AUTH=basic:${token}`,
-      "ghcr.io/tursodatabase/libsql-server:v0.24.32",
+      "ghcr.io/tursodatabase/libsql-server:v0.24.33",
     ],
     { stdio: "ignore" },
   );
@@ -56,7 +56,7 @@ try {
     "INSERT INTO parent(id,name) VALUES (1,'alpha'),(2,'beta')",
     "INSERT INTO child(id,parent_id,payload,score) VALUES (10,1,x'0001ff',1.5),(11,2,x'02',2.25)",
   ];
-  const source = new Database(sourcePath);
+  const source = new DatabaseSync(sourcePath);
   for (const statement of statements) source.exec(statement);
   source.close();
   for (const statement of statements) await target.execute(statement);

@@ -30,8 +30,7 @@
     "@libsql/client": "^0.18.0",
     "@libsql/kysely-libsql": "^0.4.1",
     "astro": "^7.3.3",
-    "better-sqlite3": "^12.11.1",
-    "emdash": "0.34.0",
+    "emdash": "0.38.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

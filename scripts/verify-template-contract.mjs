@@ -50,6 +50,24 @@ const env = readFileSync("dokploy.env.example", "utf8");
 if (env.includes("${{project.")) {
   throw new Error("Unresolved Dokploy project interpolation is forbidden");
 }
+const bannedAddons = ["better-sqlite3"];
+for (const file of [
+  "package.json",
+  "Dockerfile",
+  "pnpm-workspace.yaml",
+  "scripts/audit-libsql-parity.mjs",
+  "scripts/test-parity-audit.mjs",
+  "scripts/test-docker-runtime.mjs",
+]) {
+  const content = readFileSync(file, "utf8");
+  for (const addon of bannedAddons) {
+    if (content.includes(addon)) {
+      throw new Error(
+        `${file} still references ${addon}; EmDash 0.36+ uses node:sqlite`,
+      );
+    }
+  }
+}
 console.log(
   "Template contract verified: two-service, stateless, runtime-secret architecture",
 );

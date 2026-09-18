@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createClient } from "@libsql/client";
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
 const sourcePath = process.argv[2];
 if (!sourcePath)
@@ -10,7 +10,7 @@ const authToken = process.env.LIBSQL_AUTH_TOKEN;
 if (!url || !authToken)
   throw new Error("LIBSQL_URL and LIBSQL_AUTH_TOKEN are required");
 
-const source = new Database(sourcePath, { readonly: true });
+const source = new DatabaseSync(sourcePath, { readOnly: true });
 const target = createClient({ url, authToken });
 const quote = (value) => `"${String(value).replaceAll('"', '""')}"`;
 const stable = (value) => {
