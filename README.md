@@ -33,8 +33,9 @@ This template captures lessons from a real production migration: build-time data
 
 ## Requirements
 
-- Node.js 24 LTS and Corepack.
+- Node.js 24 LTS (≥ 24.19) and Corepack.
 - pnpm 10.34.5.
+- Docker only for the container gates (`test:docker`, `test:libsql`, `test:parity`).
 - Dokploy with native libSQL support.
 - Cloudflare R2 bucket and S3 API credentials.
 - DNS pointed to the Dokploy server.
