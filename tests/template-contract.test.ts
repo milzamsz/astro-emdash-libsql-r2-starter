@@ -34,6 +34,15 @@ describe("production topology contract", () => {
     expect(readme).toContain("exactly two independent services");
     expect(readme).toContain("No Docker Compose deployment");
   });
+  it("reads the database through EmDash's public runtime accessor", () => {
+    // EmDash 0.38 no longer attaches `db` to `locals.emdash` on anonymous
+    // public routes, so a health check that reads `locals.emdash.db` reports
+    // "degraded" even when libSQL is perfectly reachable.
+    const health = read("src/pages/api/health.ts");
+    expect(health).not.toContain("locals");
+    expect(health).toContain('from "emdash/runtime"');
+    expect(health).toContain("getDb");
+  });
   it("runs SQLite without the better-sqlite3 native addon", () => {
     const manifest = JSON.parse(read("package.json")) as {
       dependencies: Record<string, string>;
