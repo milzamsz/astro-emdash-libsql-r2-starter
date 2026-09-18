@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -72,12 +72,10 @@ try {
     },
   );
   docker(["network", "create", network], { stdio: "ignore" });
-  const serverEnvPath = join(secretDir, "libsql.env");
-  writeFileSync(
-    serverEnvPath,
-    `SQLD_NODE=primary\nSQLD_HTTP_AUTH=basic:${token}\n`,
-    { mode: 0o600 },
-  );
+  // `-e NAME` without `=value` makes the docker CLI read the value from its own
+  // environment, so the credential never reaches a process argument. A
+  // `--env-file` cannot be used here: this host's snap-confined docker client
+  // has a private /tmp and cannot see a file written there.
   docker(
     [
       "run",
@@ -86,11 +84,16 @@ try {
       dbName,
       "--network",
       network,
-      "--env-file",
-      serverEnvPath,
+      "-e",
+      "SQLD_NODE=primary",
+      "-e",
+      "SQLD_HTTP_AUTH",
       "ghcr.io/tursodatabase/libsql-server:v0.24.33",
     ],
-    { stdio: "ignore" },
+    {
+      stdio: "ignore",
+      env: { ...process.env, SQLD_HTTP_AUTH: `basic:${token}` },
+    },
   );
   const secretContent = [
     `LIBSQL_AUTH_TOKEN=${token}`,
@@ -218,7 +221,12 @@ console.log('blank libSQL bootstrap ok tables='+tables+' applied='+applied.lengt
     );
 
   // Second run: restarting the app against an already-migrated database must
-  // boot cleanly and must not re-apply or duplicate any migration.
+  // boot cleanly and must not re-apply or duplicate any migration. Capture
+  // StartedAt so a restart that silently did nothing cannot pass as a second run.
+  const startedAtBefore = docker(
+    ["inspect", "--format", "{{.State.StartedAt}}", appName],
+    { encoding: "utf8" },
+  ).trim();
   docker(["restart", appName], { stdio: "ignore" });
 
   // `docker restart` returns while the container is still cycling, so
@@ -243,6 +251,14 @@ console.log('blank libSQL bootstrap ok tables='+tables+' applied='+applied.lengt
       `Container did not return to a running state after restart:\n${logs}`,
     );
   }
+  const startedAtAfter = docker(
+    ["inspect", "--format", "{{.State.StartedAt}}", appName],
+    { encoding: "utf8" },
+  ).trim();
+  if (startedAtAfter === startedAtBefore)
+    throw new Error(
+      `Container did not actually restart (StartedAt unchanged at ${startedAtBefore}); the second run was never exercised`,
+    );
 
   let secondRunHealthy = false;
   let lastSecondProbe = "no probe attempted";
