@@ -31,4 +31,23 @@ describe("stack version alignment", () => {
     // @astrojs/check 0.9.10 declares peer typescript ^5.0.0 || ^6.0.0.
     expect(pkg.devDependencies.typescript).toMatch(/^\^6\./);
   });
+  it("pins EmDash exactly to the validated release", () => {
+    // A caret range would let a future 0.x minor land unreviewed, and EmDash
+    // ships database migrations in minors.
+    expect(pkg.dependencies.emdash).toBe("0.38.0");
+  });
+
+  it("documents the EmDash version it installs", () => {
+    expect(readFileSync("AGENTS.md", "utf8")).toContain("EmDash 0.38.0");
+    expect(readFileSync("README.md", "utf8")).toContain("EmDash 0.38.0");
+  });
+
+  it("pins one libSQL server image across docs and smoke tests", () => {
+    const pin = "ghcr.io/tursodatabase/libsql-server:v0.24.33";
+    expect(readFileSync("docs/DOKPLOY.md", "utf8")).toContain(pin);
+    expect(readFileSync("scripts/test-libsql-runtime.mjs", "utf8")).toContain(
+      pin,
+    );
+    expect(readFileSync("scripts/test-parity-audit.mjs", "utf8")).toContain(pin);
+  });
 });

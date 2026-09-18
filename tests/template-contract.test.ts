@@ -34,4 +34,21 @@ describe("production topology contract", () => {
     expect(readme).toContain("exactly two independent services");
     expect(readme).toContain("No Docker Compose deployment");
   });
+  it("runs SQLite without the better-sqlite3 native addon", () => {
+    const manifest = JSON.parse(read("package.json")) as {
+      dependencies: Record<string, string>;
+      devDependencies: Record<string, string>;
+    };
+    expect(manifest.dependencies["better-sqlite3"]).toBeUndefined();
+    expect(manifest.devDependencies["better-sqlite3"]).toBeUndefined();
+    expect(read("Dockerfile")).not.toContain("better-sqlite3");
+    expect(read("pnpm-workspace.yaml")).not.toContain("better-sqlite3");
+    for (const script of [
+      "scripts/audit-libsql-parity.mjs",
+      "scripts/test-parity-audit.mjs",
+      "scripts/test-docker-runtime.mjs",
+    ]) {
+      expect(read(script)).not.toContain("better-sqlite3");
+    }
+  });
 });
