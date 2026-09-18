@@ -52,6 +52,9 @@ describe("production topology contract", () => {
     expect(manifest.devDependencies["better-sqlite3"]).toBeUndefined();
     expect(read("Dockerfile")).not.toContain("better-sqlite3");
     expect(read("pnpm-workspace.yaml")).not.toContain("better-sqlite3");
+    // Scan the lockfile too: a transitive reintroduction would otherwise pass
+    // both this guard and the Docker build.
+    expect(read("pnpm-lock.yaml")).not.toContain("better-sqlite3");
     for (const script of [
       "scripts/audit-libsql-parity.mjs",
       "scripts/test-parity-audit.mjs",

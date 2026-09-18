@@ -53,6 +53,7 @@ if (env.includes("${{project.")) {
 const bannedAddons = ["better-sqlite3"];
 for (const file of [
   "package.json",
+  "pnpm-lock.yaml",
   "Dockerfile",
   "pnpm-workspace.yaml",
   "scripts/audit-libsql-parity.mjs",

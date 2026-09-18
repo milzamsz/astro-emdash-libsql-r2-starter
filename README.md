@@ -23,6 +23,9 @@ This template captures lessons from a real production migration: build-time data
 - SQLite for local development on Node's built-in `node:sqlite` (no native addon).
 - EmDash core migrations applied automatically at runtime (`migrations.runtime = "auto"`).
 - Runtime-resolved libSQL dialect for production; credentials never baked into `dist`.
+- The production DB path uses `@libsql/kysely-libsql` (currently 0.4.1, the
+  latest) which resolves `@libsql/client` 0.8.1; the smoke scripts query with
+  their own `@libsql/client` 0.18.0. Those are separate clients by design.
 - R2/S3 descriptor selected during build, credentials resolved at runtime. Browser uploads use signed direct R2 PUTs, so bucket CORS is required.
 - Root-only runtime secret file mounted by Dokploy.
 - Stateless app container with no `/app/data` production volume.
@@ -146,7 +149,11 @@ LIBSQL_URL=... LIBSQL_AUTH_TOKEN=... pnpm run audit:parity -- source.db
 
 Never rely on ignored local database state. Every schema/data change needs:
 
-1. A tracked seed/manifest under `.emdash/` or `config/emdash/`.
+1. A tracked migration set. Runtime migrations are `auto`, so the applied
+   set is pinned by the exact `emdash` version in `package.json` and
+   `pnpm-lock.yaml`. EmDash writes `.emdash/migrations.json` only when the
+   descriptor enables deployment-managed migrations, which this template
+   does not, so that generated file is ignored rather than committed.
 2. An idempotent persistent-DB migration.
 3. A test that runs it twice.
 4. A clean-image verifier for generated/admin patches.

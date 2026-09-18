@@ -37,6 +37,16 @@ describe("stack version alignment", () => {
     expect(pkg.dependencies.emdash).toBe("0.38.0");
   });
 
+  it("installs the EmDash release the manifest pins", () => {
+    // The specifier assertion above is only a change detector: it cannot see a
+    // range resolving to a different release. Read the resolved tree so
+    // lockfile drift cannot pass silently.
+    const installed = JSON.parse(
+      readFileSync("node_modules/emdash/package.json", "utf8"),
+    ) as { version: string };
+    expect(installed.version).toBe("0.38.0");
+  });
+
   it("documents the EmDash version it installs", () => {
     expect(readFileSync("AGENTS.md", "utf8")).toContain("EmDash 0.38.0");
     expect(readFileSync("README.md", "utf8")).toContain("EmDash 0.38.0");
