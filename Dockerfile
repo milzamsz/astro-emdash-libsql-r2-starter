@@ -20,7 +20,7 @@ ENV EMDASH_STORAGE_DRIVER=s3
 ENV ASTRO_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm rebuild better-sqlite3 && pnpm run verify:template && pnpm build
+RUN pnpm run verify:template && pnpm build
 RUN pnpm prune --prod
 
 FROM base AS runtime

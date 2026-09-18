@@ -34,4 +34,33 @@ describe("production topology contract", () => {
     expect(readme).toContain("exactly two independent services");
     expect(readme).toContain("No Docker Compose deployment");
   });
+  it("reads the database through EmDash's public runtime accessor", () => {
+    // EmDash 0.38 no longer attaches `db` to `locals.emdash` on anonymous
+    // public routes, so a health check that reads `locals.emdash.db` reports
+    // "degraded" even when libSQL is perfectly reachable.
+    const health = read("src/pages/api/health.ts");
+    expect(health).not.toContain("locals");
+    expect(health).toContain('from "emdash/runtime"');
+    expect(health).toContain("getDb");
+  });
+  it("runs SQLite without the better-sqlite3 native addon", () => {
+    const manifest = JSON.parse(read("package.json")) as {
+      dependencies: Record<string, string>;
+      devDependencies: Record<string, string>;
+    };
+    expect(manifest.dependencies["better-sqlite3"]).toBeUndefined();
+    expect(manifest.devDependencies["better-sqlite3"]).toBeUndefined();
+    expect(read("Dockerfile")).not.toContain("better-sqlite3");
+    expect(read("pnpm-workspace.yaml")).not.toContain("better-sqlite3");
+    // Scan the lockfile too: a transitive reintroduction would otherwise pass
+    // both this guard and the Docker build.
+    expect(read("pnpm-lock.yaml")).not.toContain("better-sqlite3");
+    for (const script of [
+      "scripts/audit-libsql-parity.mjs",
+      "scripts/test-parity-audit.mjs",
+      "scripts/test-docker-runtime.mjs",
+    ]) {
+      expect(read(script)).not.toContain("better-sqlite3");
+    }
+  });
 });

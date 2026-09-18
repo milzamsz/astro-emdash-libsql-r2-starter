@@ -18,7 +18,7 @@ Production resource names must not contain “staging”. If staging is required
 
 - mode: primary;
 - namespaces: disabled for a single CMS;
-- image: pinned `ghcr.io/tursodatabase/libsql-server:v0.24.32`;
+- image: pinned `ghcr.io/tursodatabase/libsql-server:v0.24.33`;
 - public ports: none;
 - persistence: Dokploy-managed volume.
 

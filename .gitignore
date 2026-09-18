@@ -12,3 +12,5 @@ uploads/
 coverage/
 .DS_Store
 emdash-env.d.ts
+.hermes/
+.emdash/migrations.json

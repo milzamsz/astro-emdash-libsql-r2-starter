@@ -9,6 +9,8 @@
 - [ ] `pnpm run test:docker`
 - [ ] `pnpm run test:libsql`
 - [ ] `pnpm run test:parity`
+- [ ] `pnpm run format:check`
+- [ ] `pnpm test` asserts EmDash `0.38.0` in `tests/dependency-pins.test.ts`
 - [ ] No secrets/DBs in Git diff
 - [ ] Independent review complete
 
@@ -16,7 +18,8 @@
 
 - [ ] Manual native libSQL backup
 - [ ] Restore drill current
-- [ ] Migration twice successfully
+- [ ] Migration twice successfully (`pnpm run test:libsql` asserts the second run)
+- [ ] `_emdash_migrations` head is `077_plugin_storage_revisions`
 - [ ] Parity reviewed
 - [ ] Rollback archive/checksum retained
 

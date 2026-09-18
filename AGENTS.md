@@ -27,7 +27,8 @@ Cloudflare R2 is external object storage, not a Dokploy service. Do not introduc
 - Node 24 LTS.
 - pnpm 10.34.5 via Corepack.
 - Astro 7.
-- EmDash 0.34.0 until an explicit upgrade validates generated-package patches and migrations.
+- EmDash 0.38.0. Upgrading requires a libSQL backup and a migration run: 0.35.0–0.38.0 add core migrations `072_media_folders` … `077_plugin_storage_revisions`.
+- SQLite runs on Node's built-in `node:sqlite`. Do not add `better-sqlite3`; the Docker build fails closed if it reappears.
 - Pin native libSQL image; never production `latest`.
 
 ## Local vs production
